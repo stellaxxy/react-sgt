@@ -12,14 +12,32 @@ class AddStudent extends Component {
     handleSubmit = (event) => {
         event.preventDefault();//prevent form refresh ; url no longer change, page no longer refresh
 
-        console.log('Form submitted', this.state);
+        //console.log('Form submitted', this.state);
+
+        this.props.add(this.state);
+
+        this.resetForm();
+    };
+    //property storing anonymous function
+    resetForm = () => {
+        this.setState({
+            name: '',
+            course: '',
+            grade: ''
+        });
     };
 
     handleKeyPress = (event) => {
-        console.log('Event:', event.target);
-        console.log('Event Name:', event.target.name);
-        console.log('Event Value:', event.target.value);
-/*
+       // console.log('Event:', event.target);
+        //console.log('Event Name:', event.target.name);
+        //console.log('Event Value:', event.target.value);
+
+        //after setState, it will call render afterwards
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+
+    /*
         switch(event.target.name){
             case 'name':
                 this.setState({
@@ -36,7 +54,7 @@ class AddStudent extends Component {
                     grade: event.target.value
                 });
         }
-        */
+     */
     };
 
 
@@ -44,29 +62,31 @@ class AddStudent extends Component {
         const {name, course, grade} = this.state;
 
         return (
+            //for onsubmit or onclick on add button; only pick one way or the other; the first one is preferred
+            //if you only have one input, you dont need to have submit button to submit form; enter key would work
             <form onSubmit={this.handleSubmit}>
                 <div className="row">
                     <div className="col input-field s10 offset-s1">
-                        <input onChange={this.handleKeyPress} name="name" type="text" id="name" value={name}/>
+                        <input onChange={this.handleKeyPress} name="name" type="text" id="name" value={name} autoComplete="off"/>
                         <label htmlFor="name">Name</label>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col input-field s10 offset-s1">
-                        <input onChange={this.handleKeyPress} name="course" type="text" id="course" value={course}/>
+                        <input onChange={this.handleKeyPress} name="course" type="text" id="course" value={course} autoComplete="off"/>
                         <label htmlFor="course">Course</label>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col input-field s10 offset-s1">
-                        <input onChange={this.handleKeyPress} name="grade" type="text" id="grade" value={grade}/>
+                        <input onChange={this.handleKeyPress} name="grade" type="text" id="grade" value={grade} autoComplete="off"/>
                         <label htmlFor="grade">Grade</label>
                     </div>
                 </div>
 
                 <div className="row">
                     <div className="col s6 center">
-                        <button type="button" className="btn red darken-2">Clear</button>
+                        <button onClick={this.resetForm} type="button" className="btn red darken-2">Clear</button>
                     </div>
                     <div className="col s6 center">
                         <button className="btn green darken-2">Add</button>
