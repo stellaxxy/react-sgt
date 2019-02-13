@@ -47,16 +47,25 @@ class App extends Component {
         });
     }
 
-    getStudentData(){
+    async getStudentData(){
         //call server to get student data
-        axios.get('http://localhost/server/getstudentlist.php').then((response) => {
+        const resp = await axios.get('http://localhost/server/getstudentlist.php');//will return a promise; whereever we have a async we put await in front of it; behind the scenes, await put a .then() after get() and put all the rest
+        //of the code in the function are put inside of then; works the same way as normal promise look like; it does'nt stop the code, all the other code can still running
+//to use async way we have to be inside of a function
+        console.log('Resp:', resp);
+
+        this.setState({
+            students: resp.data.data
+        });
+    /*  old way of doing it ; now people do async way
+    axios.get('http://localhost/server/getstudentlist.php').then((response) => {
             console.log('Server Response:', response.data.data);
 
             this.setState({
                 students: response.data.data
             });
         });//axios returns a promise; same as ajax
-
+     */
 
     }
 
