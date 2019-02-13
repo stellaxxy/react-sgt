@@ -16,7 +16,7 @@ export function formatPostData(data){
     const urlParams = new URLSearchParams();//build a query string for you
     //destructuring array
     for(let [key, value] of Object.entries(data)){ //takes all the key value pairs in a object and put it into an array
-        console.log('key:', key, 'value:', value);
+       //console.log('key:', key, 'value:', value);
 
         urlParams.append(key, value);
     }

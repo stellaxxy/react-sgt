@@ -21,7 +21,8 @@ class App extends Component {
         this.getStudentData();
     }
 
-    deleteStudent = (id) => {
+    deleteStudent = async (id) => {
+        /*
         //array.findIdex
         const indexToDelete = this.state.students.findIndex((student) => {
             return student.id === id;
@@ -36,6 +37,12 @@ class App extends Component {
                 students: tempStudents
             });
         }
+        */
+        const formattedId = formatPostData({id: id});//{id} since key and value are the same we can just put id only
+
+        await axios.post('/server/deletestudent.php', formattedId);
+
+        this.getStudentData();
     }
 
     addStudent = async (student) => { //async always in front of the function
@@ -49,35 +56,48 @@ class App extends Component {
 
         const formattedStudent = formatPostData(student);
 
-        const resp = await axios.post('http://localhost/server/createstudent.php', formattedStudent);//post method - pass in the data you want to send(an object)
+        await axios.post('/server/createstudent.php', formattedStudent);//post method - pass in the data you want to send(an object)
 
-        console.log('Add Student Response:', resp);
+       // console.log('Add Student Response:', resp);
+
+        this.getStudentData();
     }
 
     async getStudentData(){
         //call server to get student data
-        const resp = await axios.get('http://localhost/server/getstudentlist.php');//will return a promise; whereever we have a async we put await in front of it; behind the scenes, await put a .then() after get() and put all the rest
+        const resp = await axios.get('/server/getstudentlist.php');//http://localhost/server/getstudentlist.php'   /server/getstudentlist.php correct way of writing it; doesn't work for development because the server is on a different server
+        //will return a promise; whereever we have a async we put await in front of it; behind the scenes, await put a .then() after get() and put all the rest
         //of the code in the function are put inside of then; works the same way as normal promise look like; it does'nt stop the code, all the other code can still running
 //to use async way we have to be inside of a function
         //console.log('Resp:', resp);
-        if(resp.data.success){
-            this.setState({
-                students: resp.data.data//students is undefined when no data
-            });
-        }
 
-        console.log('Get List Resp:', resp);
+        this.setState({
+            students: resp.data.data || []
+        });
+
+        /*
+                if(resp.data.success){
+                    this.setState({
+                        students: resp.data.data//students is undefined when no data
+                    });
+                } //else {
+                   // this.setState({
+                     //   students: []
+                    //});
+                //}
+         */
+                console.log('Get List Resp:', resp);
 
 
-    /*  old way of doing it ; now people do async way
-    axios.get('http://localhost/server/getstudentlist.php').then((response) => {
-            console.log('Server Response:', response.data.data);
+            /*  old way of doing it ; now people do async way
+            axios.get('http://localhost/server/getstudentlist.php').then((response) => {
+                    console.log('Server Response:', response.data.data);
 
-            this.setState({
-                students: response.data.data
-            });
-        });//axios returns a promise; same as ajax
-     */
+                    this.setState({
+                        students: response.data.data
+                    });
+                });//axios returns a promise; same as ajax
+             */
 
     }
 
