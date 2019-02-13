@@ -5,8 +5,7 @@ import React, { Component } from 'react';
 import axios from 'axios'; //object constructor; function; not a component
 import Table from './table';
 import AddStudent from './add_student';
-import studentData from '../data/get_all_students';
-import {randomString} from '../helpers';//since it is index file we dont need to specify index
+import {formatPostData} from '../helpers';//since it is index file we dont need to specify index
 
 //console.log('randomString3:', randomString(3));
 //console.log('randomString default:', randomString());
@@ -39,12 +38,20 @@ class App extends Component {
         }
     }
 
-    addStudent = (student) => {
-        student.id = randomString();
+    addStudent = async (student) => { //async always in front of the function
+        //student.id = randomString();
 
+        /*
         this.setState({
             students: [...this.state.students, student]//works for array or objects, add the existing students then add the new student
         });
+        */
+
+        const formattedStudent = formatPostData(student);
+
+        const resp = await axios.post('http://localhost/server/createstudent.php', formattedStudent);//post method - pass in the data you want to send(an object)
+
+        console.log('Add Student Response:', resp);
     }
 
     async getStudentData(){
@@ -52,11 +59,16 @@ class App extends Component {
         const resp = await axios.get('http://localhost/server/getstudentlist.php');//will return a promise; whereever we have a async we put await in front of it; behind the scenes, await put a .then() after get() and put all the rest
         //of the code in the function are put inside of then; works the same way as normal promise look like; it does'nt stop the code, all the other code can still running
 //to use async way we have to be inside of a function
-        console.log('Resp:', resp);
+        //console.log('Resp:', resp);
+        if(resp.data.success){
+            this.setState({
+                students: resp.data.data//students is undefined when no data
+            });
+        }
 
-        this.setState({
-            students: resp.data.data
-        });
+        console.log('Get List Resp:', resp);
+
+
     /*  old way of doing it ; now people do async way
     axios.get('http://localhost/server/getstudentlist.php').then((response) => {
             console.log('Server Response:', response.data.data);
