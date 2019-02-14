@@ -16,7 +16,8 @@ class App extends Component {
 
     render(){
         //Route - exact ; path; component - all attibutes of route; have to put exact name
-        //:id - url parameters
+        //:id - url parameters - might want to do some error checkin when get information from url because it can contain invalid information
+        //any true security issue should be handled by the server side; frontend error checking is for user experience since if we do it in the frontend people can easily change/manipulate the code
         return(
             <div className="container">
                 <Route exact path="/" component={Table}/>

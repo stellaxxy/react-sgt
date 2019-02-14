@@ -12,7 +12,7 @@ import {formatPostData} from "../helpers";
 class Table extends Component {
     //this component owns the data right now so all the changes / updates should happen here
     state = {
-        students: []
+        students: null
     };
     //life cycle method
     componentDidMount(){
@@ -66,7 +66,7 @@ class Table extends Component {
                     //});
                 //}
          */
-        console.log('Get List Resp:', resp);
+        //console.log('Get List Resp:', resp);
 
 
         /*  old way of doing it ; now people do async way
@@ -91,6 +91,15 @@ class Table extends Component {
                 //always put the key in the outermost element
                 return <StudentRow delete={this.deleteStudent} key={student.id} student={student}/>
             });
+        } else if (students === null){
+
+                studentRows.push(
+                <tr key="no-data">
+                    <td colSpan="4">
+                        <h4 className="center grey-text">Student Data Loading</h4>
+                    </td>
+                </tr>
+            );
         } else {
             //span all 4 columns - going across the table
             //JSX is just an object
