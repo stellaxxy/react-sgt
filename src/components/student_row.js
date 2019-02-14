@@ -1,5 +1,6 @@
 //dont need to worry about state here because you just gonna pass in data here and all it need to do is render the row
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 const StudentRow = (props) => {
    // console.log('Student:', props.student);
@@ -8,7 +9,9 @@ const StudentRow = (props) => {
 
     return (
         <tr>
-            <td>{name}</td>
+            <td>
+                <Link to={`/student/${id}`}>{name}</Link>
+            </td>
             <td>{course}</td>
             <td>{grade}</td>
             <td className="center">
